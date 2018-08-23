@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: urano
+  cloud:
+    config:
+      fail-fast: true
+      uri: https://ggastudios-cerebro.herokuapp.com
