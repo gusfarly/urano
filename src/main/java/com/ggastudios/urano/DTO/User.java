@@ -15,7 +15,6 @@ public class User {
 
     @Id
     private String id;
-    @NotNull
     private Calendar dateStart;
     private Calendar dateUpdate;
     @UniqueElements
