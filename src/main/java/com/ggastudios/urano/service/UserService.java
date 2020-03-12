@@ -1,13 +1,9 @@
 package com.ggastudios.urano.service;
 
-import com.ggastudios.urano.bean.BaseBean;
 import com.ggastudios.urano.bean.UserBean;
-import com.ggastudios.urano.entities.BaseEntity;
 import com.ggastudios.urano.entities.UserEntity;
-import com.ggastudios.urano.DTO.UserResponse;
 import com.ggastudios.urano.exception.UserNotFoundException;
 import com.ggastudios.urano.repository.UserRepository;
-import com.ggastudios.urano.utils.Mappers;
 import com.ggastudios.urano.utils.MappersEntity;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

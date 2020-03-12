@@ -1,12 +1,9 @@
 package com.ggastudios.urano.controller;
 
-import com.ggastudios.urano.DTO.BaseResponse;
 import com.ggastudios.urano.DTO.UserRequest;
-import com.ggastudios.urano.bean.BaseBean;
 import com.ggastudios.urano.bean.UserBean;
 import com.ggastudios.urano.DTO.UserResponse;
 import com.ggastudios.urano.service.UserService;
-import com.ggastudios.urano.utils.Mappers;
 import com.ggastudios.urano.utils.MappersBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
