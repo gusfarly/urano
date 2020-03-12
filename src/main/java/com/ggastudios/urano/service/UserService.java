@@ -1,14 +1,20 @@
 package com.ggastudios.urano.service;
 
-import com.ggastudios.urano.DTO.User;
+import com.ggastudios.urano.bean.BaseBean;
+import com.ggastudios.urano.bean.UserBean;
+import com.ggastudios.urano.entities.BaseEntity;
+import com.ggastudios.urano.entities.UserEntity;
 import com.ggastudios.urano.DTO.UserResponse;
+import com.ggastudios.urano.exception.UserNotFoundException;
 import com.ggastudios.urano.repository.UserRepository;
+import com.ggastudios.urano.utils.Mappers;
+import com.ggastudios.urano.utils.MappersEntity;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -16,36 +22,70 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserResponse save(User user){
-        user.initDateStart();
-        userRepository.save(user);
-        return new UserResponse(user);
-    }
+    @Autowired
+    private MappersEntity<UserBean, UserEntity> map;
 
-    public UserResponse getById(String id){
-        Optional<User> user = userRepository.findById(id);
-        return new UserResponse(user.get());
-    }
+    private UserEntity saveUser(UserEntity userEntity){
 
-    public List<UserResponse> getAll(){
-        List<User> users =  userRepository.findAll();
-        List<UserResponse> userResponseList = new ArrayList<>();
-        for (User u : users){
-            userResponseList.add(new UserResponse(u));
+        if (userEntity.getId() == null){
+            userEntity.setDateStart(Calendar.getInstance());
+        }else{
+            userEntity.setDateUpdate(Calendar.getInstance());
         }
-        return userResponseList;
+        return userRepository.save(userEntity);
     }
 
-    public UserResponse update(User user){
-        Optional<User> userToSave = userRepository.findById(user.getId());
-        userToSave.get().update(user);
-        userRepository.save(userToSave.get());
-        return new UserResponse(user);
+    /**
+     * inserta un usuario en la tabla
+     * @param bean UserBean
+     * @return UserResponse
+     */
+    public UserBean insert(UserBean bean){
+        UserEntity userEntity = map.beanToEntity(bean,UserEntity.class);
+        UserEntity userResponse = saveUser(userEntity);
+        return map.entityToBean(userResponse,UserBean.class);
+    }
+
+    public UserBean update(UserBean bean,String id){
+        UserEntity userEntity = userRepository.findById(id).get();
+        userEntity = updateUser(bean,userEntity);
+        userEntity = saveUser(userEntity);
+        return map.entityToBean(userEntity,UserBean.class);
+    }
+
+    public UserBean getById(final String id) throws Exception {
+        return userRepository.findById(id)
+                .map(user -> map.entityToBean(user,UserBean.class))
+                .orElseThrow(() -> new UserNotFoundException("usuario " + id + " no encontrado"));
+    }
+
+    public List<UserBean> getAll(){
+        return userRepository.findAll().stream()
+                .map(user -> map.entityToBean(user,UserBean.class))
+                .collect(Collectors.toList());
     }
 
     public void delete(String id){
         userRepository.deleteById(id);
     }
 
+    private UserEntity updateUser(UserBean bean, UserEntity user){
+        if (StringUtils.isNotBlank(bean.getFacebookId())){
+            user.setFacebookId(bean.getFacebookId());
+        }
+        if (StringUtils.isNotBlank(bean.getIdioma())){
+            user.setIdioma(bean.getIdioma());
+        }
+        if (StringUtils.isNotBlank(bean.getPais())){
+            user.setPais(bean.getPais());
+        }
+        if (StringUtils.isNotBlank(bean.getEmail())){
+            user.setEmail(bean.getEmail());
+        }
+        if (StringUtils.isNotBlank(bean.getName())){
+            user.setName(bean.getName());
+        }
+        return user;
+    }
 
 }
