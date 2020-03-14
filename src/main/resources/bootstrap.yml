@@ -5,3 +5,4 @@ spring:
     config:
       fail-fast: true
       uri: https://ggastudios-cerebro.herokuapp.com
+      profile: ${ENVIRONMENT}
