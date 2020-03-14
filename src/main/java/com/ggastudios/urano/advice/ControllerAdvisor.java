@@ -3,6 +3,7 @@ package com.ggastudios.urano.advice;
 
 import com.ggastudios.urano.DTO.ErrorResponse;
 import com.ggastudios.urano.exception.UserNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
@@ -26,6 +28,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setCode("0001");
+        log.error(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
@@ -45,7 +48,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .collect(Collectors.toList());
 
         body.put("errors", errors);
-
+        log.error(errors.toString());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
