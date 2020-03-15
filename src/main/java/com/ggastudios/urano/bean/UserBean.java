@@ -11,13 +11,14 @@ import java.util.Calendar;
 @ToString
 public class UserBean implements BaseBean {
     private String id;
-    private Calendar dateStart;
-    private Calendar dateUpdate;
+    private String idApplication;
+    private String dateStart;
+    private String dateUpdate;
     private String email;
     private boolean emailConfirmado;
     private String facebookId;
-    private String idioma;
-    private String name;
-    private String pais;
+    private String language;
+    private String username;
+    private String country;
 
 }

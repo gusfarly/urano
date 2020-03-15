@@ -1,22 +1,22 @@
 package com.ggastudios.urano.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ggastudios.urano.bean.BaseBean;
 import lombok.Data;
-import org.dozer.Mapping;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRequest implements BaseRequest {
 
-    @JsonProperty(required = true)
+    @NotEmpty(message = "idApplication no puede estar vacio")
+    private String idApplication;
+    @NotEmpty(message = "username no puede estar vacio")
+    private String username;
+    @Email(regexp = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
     private String email;
     private String facebookId;
-    @Mapping("idioma")
     private String language;
-    private String name;
-    @Mapping("pais")
     private String country;
-
 }

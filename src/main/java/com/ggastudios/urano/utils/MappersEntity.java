@@ -10,13 +10,12 @@ public class MappersEntity<B extends BaseBean,E extends BaseEntity> {
 
     private DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
 
-    public E beanToEntity(B bean,Class<E> entity){
+    public E beanToEntity(B bean, Class<E> entity){
        return dozerBeanMapper.map(bean,entity);
     }
 
     public B entityToBean(E entity,Class<B> bean){
         return dozerBeanMapper.map(entity,bean);
-
     }
 
 }
