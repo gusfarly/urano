@@ -2,6 +2,7 @@ package com.ggastudios.urano.advice;
 
 
 import com.ggastudios.urano.DTO.ErrorResponse;
+import com.ggastudios.urano.exception.UserExistsException;
 import com.ggastudios.urano.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -23,13 +24,25 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
+    private static final String CODE_USER_NOT_FOUND = "0001";
+    private static final String CODE_USER_EXISTS = "0002";
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException ex){
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
-        errorResponse.setCode("0001");
+        errorResponse.setCode(CODE_USER_NOT_FOUND);
         log.error(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserExistsException.class)
+    public ResponseEntity<?> handleUserExistsException(UserExistsException ex){
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode(CODE_USER_EXISTS);
+        log.error(ex.getMessage());
+        return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
     }
 
     @Override

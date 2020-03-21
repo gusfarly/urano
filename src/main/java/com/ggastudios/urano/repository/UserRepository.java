@@ -12,4 +12,6 @@ public interface UserRepository extends MongoRepository<UserEntity,String> {
     Optional<UserEntity> findByIdApplicationAndUsername(String idApplication, String username);
 
     List<UserEntity> findByIdApplication(String idApplication);
+
+    int countByIdApplicationAndUsername(String idApplication,String username);
 }

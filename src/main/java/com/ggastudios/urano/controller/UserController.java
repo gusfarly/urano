@@ -5,6 +5,7 @@ import com.ggastudios.urano.DTO.UserRequest;
 import com.ggastudios.urano.DTO.UserUpdateRequest;
 import com.ggastudios.urano.bean.UserBean;
 import com.ggastudios.urano.DTO.UserResponse;
+import com.ggastudios.urano.exception.UserExistsException;
 import com.ggastudios.urano.exception.UserNotFoundException;
 import com.ggastudios.urano.service.UserService;
 import com.ggastudios.urano.utils.MappersBean;
@@ -39,7 +40,7 @@ public class UserController {
     private MappersBean<UserRequest,UserBean, UserInsertResponse> mapInsert;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> insert(@Valid @RequestBody UserRequest request){
+    public ResponseEntity<?> insert(@Valid @RequestBody UserRequest request) throws UserExistsException {
         UserBean beanRequest = mapInsert.requestToBean(request,UserBean.class);
         UserBean beanResponse = userService.insert(beanRequest);
         UserInsertResponse response = mapInsert.beanToResponse(beanResponse,UserInsertResponse.class);

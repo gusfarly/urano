@@ -2,6 +2,7 @@ package com.ggastudios.urano.service;
 
 import com.ggastudios.urano.bean.UserBean;
 import com.ggastudios.urano.entities.UserEntity;
+import com.ggastudios.urano.exception.UserExistsException;
 import com.ggastudios.urano.exception.UserNotFoundException;
 import com.ggastudios.urano.repository.UserRepository;
 import com.ggastudios.urano.utils.MappersEntity;
@@ -38,7 +39,10 @@ public class UserService {
      * @param bean UserBean
      * @return UserResponse
      */
-    public UserBean insert(UserBean bean){
+    public UserBean insert(UserBean bean) throws UserExistsException {
+        if (userRepository.countByIdApplicationAndUsername(bean.getIdApplication(),bean.getUsername()) > 0){
+            throw new UserExistsException("username existe para ese idApplication");
+        }
         UserEntity userEntity = map.beanToEntity(bean,UserEntity.class);
         UserEntity userResponse = saveUser(userEntity);
         return map.entityToBean(userResponse,UserBean.class);
