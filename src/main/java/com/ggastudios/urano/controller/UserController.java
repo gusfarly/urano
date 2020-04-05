@@ -54,14 +54,6 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAll () throws UserNotFoundException {
-        List<UserResponse> userBeanList = userService.getAll().stream()
-                .map(bean -> mapGet.beanToResponse(bean,UserResponse.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(userBeanList);
-    }
-
     @PatchMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(@Valid @RequestBody UserUpdateRequest request, @PathVariable("id")String id)
     {
