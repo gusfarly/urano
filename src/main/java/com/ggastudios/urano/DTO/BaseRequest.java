@@ -1,6 +1,6 @@
 package com.ggastudios.urano.DTO;
 
-import com.ggastudios.urano.bean.BaseBean;
+import java.io.Serializable;
 
-public interface BaseRequest {
+public interface BaseRequest extends Serializable {
 }

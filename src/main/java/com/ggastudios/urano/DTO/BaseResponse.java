@@ -1,4 +1,6 @@
 package com.ggastudios.urano.DTO;
 
-public interface BaseResponse {
+import java.io.Serializable;
+
+public interface BaseResponse extends Serializable {
 }
