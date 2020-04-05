@@ -3,15 +3,28 @@ package com.ggastudios.urano.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.sql.Date;
-import java.util.Calendar;
 
 @Data
 @EqualsAndHashCode
 @Document(collection = "user")
 public class UserEntity implements BaseEntity {
+
+    @Transient
+    public static final String PARAM_APPLICATION = "idApplication";
+    @Transient
+    public static final String PARAM_USERNAME = "username";
+    @Transient
+    public static final String PARAM_EMAIL = "email";
+    @Transient
+    public static final String PARAM_FACEBOOK = "facebookId";
+    @Transient
+    public static final String PARAM_LANGUAGE = "language";
+    @Transient
+    public static final String PARAM_COUNTRY = "country";
 
     @Id
     private String id;
