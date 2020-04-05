@@ -37,6 +37,6 @@ public class UserEntity implements BaseEntity {
     private String country;
     private String dateUpdate;
     private String dateStart;
-    private Date dateDelete;
+    private String dateDelete;
 
 }
