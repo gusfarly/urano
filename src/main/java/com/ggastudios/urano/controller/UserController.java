@@ -5,20 +5,24 @@ import com.ggastudios.urano.DTO.request.user.UserRequest;
 import com.ggastudios.urano.DTO.request.user.UserUpdateRequest;
 import com.ggastudios.urano.bean.UserBean;
 import com.ggastudios.urano.DTO.response.user.UserResponse;
+import com.ggastudios.urano.entities.UserEntity;
+import com.ggastudios.urano.exception.ApplicationNotFoundException;
 import com.ggastudios.urano.exception.UserExistsException;
 import com.ggastudios.urano.exception.UserNotFoundException;
 import com.ggastudios.urano.service.UserService;
 import com.ggastudios.urano.utils.MappersBean;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -40,11 +44,33 @@ public class UserController {
     private MappersBean<UserRequest,UserBean, UserInsertResponse> mapInsert;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> insert(@Valid @RequestBody UserRequest request) throws UserExistsException {
+    public ResponseEntity<?> insert(@Valid @RequestBody UserRequest request) throws UserExistsException, ApplicationNotFoundException {
         UserBean beanRequest = mapInsert.map(request,UserBean.class);
         UserBean beanResponse = userService.insert(beanRequest);
         UserInsertResponse response = mapInsert.map(beanResponse,UserInsertResponse.class);
         return ResponseEntity.created(URI.create("")).body(response);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getFilter(
+            @RequestParam(value = UserEntity.PARAM_APPLICATION,required = false) String idApplication,
+            @RequestParam(value = "username",required = false) String username,
+            @RequestParam(value = "email",required = false) String email,
+            @RequestParam(value = "facebookId",required = false) String facebookId,
+            @RequestParam(value = "language",required = false) String language,
+            @RequestParam(value = "country",required = false) String country
+    ) throws UserNotFoundException {
+        Map<String,String> filter = new HashMap<>();
+        filter.put(UserEntity.PARAM_APPLICATION,idApplication);
+        if (StringUtils.isNotBlank(username)) filter.put("username",username);
+        if (StringUtils.isNotBlank(email)) filter.put("email",email);
+        if (StringUtils.isNotBlank(facebookId)) filter.put("facebookId",facebookId);
+        if (StringUtils.isNotBlank(language)) filter.put("language",language);
+        if (StringUtils.isNotBlank(country)) filter.put("country",country);
+        List<UserResponse> userResponseList = userService.findWithFilter(filter).stream()
+                .map(bean -> mapGet.map(bean,UserResponse.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(userResponseList);
     }
 
     @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)

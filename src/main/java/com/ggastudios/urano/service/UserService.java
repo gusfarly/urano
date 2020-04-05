@@ -2,12 +2,16 @@ package com.ggastudios.urano.service;
 
 import com.ggastudios.urano.bean.UserBean;
 import com.ggastudios.urano.entities.UserEntity;
+import com.ggastudios.urano.exception.ApplicationNotFoundException;
 import com.ggastudios.urano.exception.UserExistsException;
 import com.ggastudios.urano.exception.UserNotFoundException;
+import com.ggastudios.urano.repository.AppRepository;
 import com.ggastudios.urano.repository.UserRepository;
 import com.ggastudios.urano.utils.MappersEntity;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -19,6 +23,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AppRepository appRepository;
 
     @Autowired
     private MappersEntity<UserBean, UserEntity> mapEntity;
@@ -39,7 +46,9 @@ public class UserService {
      * @param bean UserBean
      * @return UserResponse
      */
-    public UserBean insert(UserBean bean) throws UserExistsException {
+    public UserBean insert(UserBean bean) throws UserExistsException, ApplicationNotFoundException {
+        if (appRepository.countById(bean.getIdApplication()) == 0){
+            throw new ApplicationNotFoundException("No se puede insertar usuarios para esa aplicacion");
         }
         UserEntity userEntity = mapEntity.map(bean,UserEntity.class);
         UserEntity userResponse = saveUser(userEntity);
@@ -74,9 +83,30 @@ public class UserService {
         return userBeanList;
     }
 
+    public List<UserBean> findWithFilter(Map<String, String> filter) throws UserNotFoundException {
+
+        UserEntity entity = new UserEntity();
+        entity.setIdApplication(filter.get(UserEntity.PARAM_APPLICATION));
+        entity.setUsername(filter.get(UserEntity.PARAM_USERNAME));
+        entity.setEmail(filter.get(UserEntity.PARAM_EMAIL));
+        entity.setFacebookId(filter.get(UserEntity.PARAM_FACEBOOK));
+        entity.setLanguage(filter.get(UserEntity.PARAM_LANGUAGE));
+        entity.setCountry(filter.get(UserEntity.PARAM_COUNTRY));
+
+        List<UserBean> userBeanList = userRepository.findAll(Example.of(entity,ExampleMatcher.matchingAll())).stream()
+                .map(user -> mapEntity.map(user,UserBean.class))
+                .collect(Collectors.toList());
+
+        if (userBeanList.isEmpty()){
+            throw new UserNotFoundException("No se encuentran usuarios con esas condiciones");
+        }
+
+        return userBeanList;
+    }
+
     public List<UserBean> getAll() throws UserNotFoundException {
         List<UserBean> userBeanList = userRepository.findAll().stream()
-                .map(user -> map.entityToBean(user,UserBean.class))
+                .map(user -> mapEntity.map(user,UserBean.class))
                 .collect(Collectors.toList());
         if (userBeanList.isEmpty()){
             throw new UserNotFoundException("No se encuentran usuarios con esas condiciones");
