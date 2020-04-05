@@ -20,4 +20,4 @@ public class UserRequest implements BaseRequest {
     private String facebookId;
     private String language;
     private String country;
-}m
+}
