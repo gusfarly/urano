@@ -1,10 +1,10 @@
 package com.ggastudios.urano.controller;
 
-import com.ggastudios.urano.DTO.UserInsertResponse;
-import com.ggastudios.urano.DTO.UserRequest;
-import com.ggastudios.urano.DTO.UserUpdateRequest;
+import com.ggastudios.urano.DTO.response.user.UserInsertResponse;
+import com.ggastudios.urano.DTO.request.user.UserRequest;
+import com.ggastudios.urano.DTO.request.user.UserUpdateRequest;
 import com.ggastudios.urano.bean.UserBean;
-import com.ggastudios.urano.DTO.UserResponse;
+import com.ggastudios.urano.DTO.response.user.UserResponse;
 import com.ggastudios.urano.exception.UserExistsException;
 import com.ggastudios.urano.exception.UserNotFoundException;
 import com.ggastudios.urano.service.UserService;

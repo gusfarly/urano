@@ -1,7 +1,8 @@
-package com.ggastudios.urano.advice;
+package com.ggastudios.urano.controller.advice;
 
 
 import com.ggastudios.urano.DTO.ErrorResponse;
+import com.ggastudios.urano.exception.ApplicationNotFoundException;
 import com.ggastudios.urano.exception.UserExistsException;
 import com.ggastudios.urano.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,18 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
-    private static final String CODE_USER_NOT_FOUND = "0001";
-    private static final String CODE_USER_EXISTS = "0002";
+    private static final String CODE_USER_NOT_FOUND = "US0001";
+    private static final String CODE_USER_EXISTS = "US0002";
+    private static final String CODE_APPLICATION_NOT_FOUND = "AP0001";
+
+    @ExceptionHandler(ApplicationNotFoundException.class)
+    public ResponseEntity<?> handleApplicacionNotFoundException(ApplicationNotFoundException ex){
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setCode(CODE_APPLICATION_NOT_FOUND);
+        errorResponse.setMessage(ex.getMessage());
+        log.error(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException ex){
