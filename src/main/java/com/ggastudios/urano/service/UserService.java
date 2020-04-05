@@ -21,7 +21,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private MappersEntity<UserBean, UserEntity> map;
+    private MappersEntity<UserBean, UserEntity> mapEntity;
 
     private UserEntity saveUser(UserEntity userEntity){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss.SSSXXX");
@@ -43,33 +43,33 @@ public class UserService {
         if (userRepository.countByIdApplicationAndUsername(bean.getIdApplication(),bean.getUsername()) > 0){
             throw new UserExistsException("username existe para ese idApplication");
         }
-        UserEntity userEntity = map.beanToEntity(bean,UserEntity.class);
+        UserEntity userEntity = mapEntity.map(bean,UserEntity.class);
         UserEntity userResponse = saveUser(userEntity);
-        return map.entityToBean(userResponse,UserBean.class);
+        return mapEntity.map(userResponse,UserBean.class);
     }
 
     public UserBean update(UserBean bean,String id){
         UserEntity userEntity = userRepository.findById(id).get();
         userEntity = updateUser(bean,userEntity);
         userEntity = saveUser(userEntity);
-        return map.entityToBean(userEntity,UserBean.class);
+        return mapEntity.map(userEntity,UserBean.class);
     }
 
     public UserBean getById(final String id) throws UserNotFoundException {
         return userRepository.findById(id)
-                .map(user -> map.entityToBean(user,UserBean.class))
+                .map(user -> mapEntity.map(user,UserBean.class))
                 .orElseThrow(() -> new UserNotFoundException("usuario " + id + " no encontrado"));
     }
 
     public UserBean getByIdApplicationAndUsername(String idApplication, String username) throws UserNotFoundException {
         return userRepository.findByIdApplicationAndUsername(idApplication,username)
-                .map( user -> map.entityToBean(user,UserBean.class))
+                .map( user -> mapEntity.map(user,UserBean.class))
                 .orElseThrow(() -> new UserNotFoundException("usuario no encontrado o no existe para la aplicación"));
     }
 
     public List<UserBean> getByIdApplication(String idApplication) throws UserNotFoundException {
         List<UserBean> userBeanList = userRepository.findByIdApplication(idApplication).stream()
-                .map( user -> map.entityToBean(user,UserBean.class)).collect(Collectors.toList());
+                .map( user -> mapEntity.map(user,UserBean.class)).collect(Collectors.toList());
         if (userBeanList.isEmpty()){
             throw new UserNotFoundException("No se encuentran usuarios para esta aplicacion");
         }

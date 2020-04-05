@@ -41,25 +41,25 @@ public class UserController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> insert(@Valid @RequestBody UserRequest request) throws UserExistsException {
-        UserBean beanRequest = mapInsert.requestToBean(request,UserBean.class);
+        UserBean beanRequest = mapInsert.map(request,UserBean.class);
         UserBean beanResponse = userService.insert(beanRequest);
-        UserInsertResponse response = mapInsert.beanToResponse(beanResponse,UserInsertResponse.class);
+        UserInsertResponse response = mapInsert.map(beanResponse,UserInsertResponse.class);
         return ResponseEntity.created(URI.create("")).body(response);
     }
 
     @GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getById(@PathVariable("id")String id) throws UserNotFoundException {
         UserBean bean = userService.getById(id);
-        UserResponse response = mapGet.beanToResponse(bean,UserResponse.class);
+        UserResponse response = mapGet.map(bean,UserResponse.class);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(@Valid @RequestBody UserUpdateRequest request, @PathVariable("id")String id)
     {
-        UserBean beanRequest = mapUpdate.requestToBean(request,UserBean.class);
+        UserBean beanRequest = mapUpdate.map(request,UserBean.class);
         UserBean beanresponse = userService.update(beanRequest,id);
-        UserResponse response = mapUpdate.beanToResponse(beanresponse,UserResponse.class);
+        UserResponse response = mapUpdate.map(beanresponse,UserResponse.class);
         return ResponseEntity.ok(response);
     }
 

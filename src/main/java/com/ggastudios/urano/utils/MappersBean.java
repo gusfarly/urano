@@ -11,11 +11,11 @@ public class MappersBean<I extends BaseRequest,B extends BaseBean,O extends Base
 
     private DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
 
-    public B requestToBean (I request, Class<B> bean){
+    public B map (I request, Class<B> bean){
         return dozerBeanMapper.map(request,bean);
     }
 
-    public O beanToResponse (B bean,Class<O> response){
+    public O map (B bean,Class<O> response){
         return dozerBeanMapper.map(bean,response);
     }
 
