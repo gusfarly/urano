@@ -54,19 +54,19 @@ public class UserController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getFilter(
             @RequestParam(value = UserEntity.PARAM_APPLICATION,required = false) String idApplication,
-            @RequestParam(value = "username",required = false) String username,
-            @RequestParam(value = "email",required = false) String email,
-            @RequestParam(value = "facebookId",required = false) String facebookId,
-            @RequestParam(value = "language",required = false) String language,
-            @RequestParam(value = "country",required = false) String country
+            @RequestParam(value = UserEntity.PARAM_USERNAME,required = false) String username,
+            @RequestParam(value = UserEntity.PARAM_EMAIL,required = false) String email,
+            @RequestParam(value = UserEntity.PARAM_FACEBOOK,required = false) String facebookId,
+            @RequestParam(value = UserEntity.PARAM_LANGUAGE,required = false) String language,
+            @RequestParam(value = UserEntity.PARAM_COUNTRY,required = false) String country
     ) throws UserNotFoundException {
         Map<String,String> filter = new HashMap<>();
         filter.put(UserEntity.PARAM_APPLICATION,idApplication);
-        if (StringUtils.isNotBlank(username)) filter.put("username",username);
-        if (StringUtils.isNotBlank(email)) filter.put("email",email);
-        if (StringUtils.isNotBlank(facebookId)) filter.put("facebookId",facebookId);
-        if (StringUtils.isNotBlank(language)) filter.put("language",language);
-        if (StringUtils.isNotBlank(country)) filter.put("country",country);
+        if (StringUtils.isNotBlank(username)) filter.put(UserEntity.PARAM_USERNAME,username);
+        if (StringUtils.isNotBlank(email)) filter.put(UserEntity.PARAM_EMAIL,email);
+        if (StringUtils.isNotBlank(facebookId)) filter.put(UserEntity.PARAM_FACEBOOK,facebookId);
+        if (StringUtils.isNotBlank(language)) filter.put(UserEntity.PARAM_LANGUAGE,language);
+        if (StringUtils.isNotBlank(country)) filter.put(UserEntity.PARAM_COUNTRY,country);
         List<UserResponse> userResponseList = userService.findWithFilter(filter).stream()
                 .map(bean -> mapGet.map(bean,UserResponse.class))
                 .collect(Collectors.toList());
