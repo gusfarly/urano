@@ -66,7 +66,6 @@ public class UserController {
     @DeleteMapping(value = "/{id}",produces = MediaType.TEXT_XML_VALUE)
     public ResponseEntity<?> delete (@PathVariable("id")String id){
         userService.delete(id);
-        ResponseEntity<String> responseEntity = new ResponseEntity("Usuario eliminado correctamente",HttpStatus.NO_CONTENT);
-        return responseEntity;
+        return (ResponseEntity<?>) ResponseEntity.noContent();
     }
 }
