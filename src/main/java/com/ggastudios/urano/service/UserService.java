@@ -40,8 +40,6 @@ public class UserService {
      * @return UserResponse
      */
     public UserBean insert(UserBean bean) throws UserExistsException {
-        if (userRepository.countByIdApplicationAndUsername(bean.getIdApplication(),bean.getUsername()) > 0){
-            throw new UserExistsException("username existe para ese idApplication");
         }
         UserEntity userEntity = mapEntity.map(bean,UserEntity.class);
         UserEntity userResponse = saveUser(userEntity);
