@@ -3,7 +3,8 @@ package com.ggastudios.urano.service;
 import com.ggastudios.urano.bean.UserBean;
 import com.ggastudios.urano.entities.UserEntity;
 import com.ggastudios.urano.exception.*;
-import com.ggastudios.urano.repository.AppRepository;
+import com.ggastudios.urano.exception.code.AppCodeMessage;
+import com.ggastudios.urano.exception.code.UserCodeMessage;
 import com.ggastudios.urano.repository.UserRepository;
 import com.ggastudios.urano.utils.Constanst;
 import com.ggastudios.urano.utils.MappersEntity;
@@ -18,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService extends BaseService{
 
     @Autowired
     private UserRepository userRepository;
@@ -45,9 +46,9 @@ public class UserService {
      * @param bean UserBean
      * @return UserResponse
      */
-    public UserBean insert(UserBean bean) throws UserExistsException, ApplicationNotFoundException {
+    public UserBean insert(UserBean bean) throws ApplicationNotFoundException {
         if (!appService.exist(bean.getIdApplication())){
-            throw new ApplicationNotFoundException("No se puede insertar usuarios para esa aplicacion");
+            throw new ApplicationNotFoundException(AppCodeMessage.USER_NOT_INSERT_FOR_APLLICATION);
         }
         UserEntity userEntity = mapEntity.map(bean,UserEntity.class);
         UserEntity userResponse = saveUser(userEntity);
@@ -64,7 +65,7 @@ public class UserService {
     public UserBean getById(final String id) throws UserNotFoundException {
         return userRepository.findById(id)
                 .map(user -> mapEntity.map(user,UserBean.class))
-                .orElseThrow(() -> new UserNotFoundException("usuario " + id + " no encontrado"));
+                .orElseThrow(() -> new UserNotFoundException(UserCodeMessage.ID_NOT_FOUND,id));
     }
 
     public List<UserBean> findWithFilter(Map<String, String> filter) throws UserNotFoundException {
@@ -82,7 +83,7 @@ public class UserService {
                 .collect(Collectors.toList());
 
         if (userBeanList.isEmpty()){
-            throw new UserNotFoundException("No se encuentran usuarios con esas condiciones");
+            throw new UserNotFoundException(UserCodeMessage.USER_NOT_FOUND);
         }
 
         return userBeanList;

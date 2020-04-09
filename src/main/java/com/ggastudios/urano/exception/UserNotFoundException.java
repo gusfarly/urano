@@ -1,26 +1,28 @@
 package com.ggastudios.urano.exception;
 
+import com.ggastudios.urano.exception.code.BaseCodeMessage;
+
 public class UserNotFoundException extends UserException {
 
     private static final long serialVersionUID = 4567213329813954255L;
 
-    public UserNotFoundException() {
-        super(UserException.CODE_USER_NOT_FOUND);
+    public UserNotFoundException(BaseCodeMessage codeMessage) {
+        super(codeMessage);
     }
 
-    public UserNotFoundException(String message) {
-        super(message,UserException.CODE_USER_NOT_FOUND);
+    public UserNotFoundException(BaseCodeMessage codeMessage,Object... args) {
+        super(codeMessage,args);
     }
 
-    public UserNotFoundException(String message, Throwable cause) {
-        super(message, cause, UserException.CODE_USER_NOT_FOUND);
+    public UserNotFoundException(String message, Throwable cause, BaseCodeMessage codeMessage) {
+        super(message, cause, codeMessage);
     }
 
-    public UserNotFoundException(Throwable cause) {
-        super(cause, UserException.CODE_USER_NOT_FOUND);
+    public UserNotFoundException(Throwable cause, BaseCodeMessage codeMessage) {
+        super(cause, codeMessage);
     }
 
-    public UserNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace, UserException.CODE_USER_NOT_FOUND);
+    public UserNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, BaseCodeMessage codeMessage) {
+        super(message, cause, enableSuppression, writableStackTrace, codeMessage);
     }
 }

@@ -2,10 +2,9 @@ package com.ggastudios.urano.service;
 
 import com.ggastudios.urano.bean.ScoreBean;
 import com.ggastudios.urano.entities.ScoreEntity;
-import com.ggastudios.urano.exception.ApplicationNotFoundException;
 import com.ggastudios.urano.exception.ScoreException;
 import com.ggastudios.urano.exception.UranoException;
-import com.ggastudios.urano.exception.UserNotFoundException;
+import com.ggastudios.urano.exception.code.ScoreCodeMessage;
 import com.ggastudios.urano.repository.ScoreRepository;
 import com.ggastudios.urano.utils.Constanst;
 import com.ggastudios.urano.utils.MappersEntity;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class ScoreService {
+public class ScoreService extends BaseService{
 
     @Autowired
     private MappersEntity<ScoreBean, ScoreEntity> mappersEntity;
@@ -53,10 +52,10 @@ public class ScoreService {
         log.debug("[insert] - **inicio**" );
 
         if (!appService.exist(bean.getApplication())){
-            throw new ApplicationNotFoundException("No se puede insertar puntuaciones para esa aplicacion");
+            throw new ScoreException(ScoreCodeMessage.APP_NOT_FOUND);
         }
         if (!userService.exist(bean.getUser())){
-            throw new UserNotFoundException("No se pueden insertar puntuaciones para ese usuario");
+            throw new ScoreException(ScoreCodeMessage.USER_NOT_FOUND);
         }
 
         int attempt = scoreRepository.countByApplicationAndUserAndLevelEquals(bean.getApplication(),bean.getUser(),bean.getLevel());
@@ -66,7 +65,7 @@ public class ScoreService {
         }else if (attempt == 0){
             entity = mappersEntity.map(bean,ScoreEntity.class);
         }else{
-            throw new ScoreException("No puede existir mas de un score por usuario, nivel y aplicación",ScoreException.MULTISCORE_CODE);
+            throw new ScoreException(ScoreCodeMessage.MULTISCORE);
         }
 
         ScoreEntity entityResponse = this.save(entity);
