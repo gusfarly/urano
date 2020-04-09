@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AppService {
@@ -42,6 +44,12 @@ public class AppService {
         return appRepository.findById(idApplication)
                 .map(entity -> mapperEntity.map(entity,AppBean.class))
                 .orElseThrow(() -> new ApplicationNotFoundException("no existe la aplicacion"));
+    }
+
+    public List<AppBean> findAll(){
+        return appRepository.findAll().stream()
+                .map(entity -> mapperEntity.map(entity,AppBean.class))
+                .collect(Collectors.toList());
     }
 
     public AppBean updateApp(AppBean bean,String idApplication) throws ApplicationNotFoundException {

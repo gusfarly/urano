@@ -9,12 +9,14 @@ import com.ggastudios.urano.bean.AppBean;
 import com.ggastudios.urano.exception.ApplicationNotFoundException;
 import com.ggastudios.urano.service.AppService;
 import com.ggastudios.urano.utils.MappersBean;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -35,6 +37,14 @@ public class AppController {
         AppBean bean = mapperInsert.map(request,AppBean.class);
         bean = appService.insert(bean);
         AppInsertResponse response = mapperInsert.map(bean,AppInsertResponse.class);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findAll(){
+        List<AppResponse> response = appService.findAll().stream()
+                .map(bean -> mapGet.map(bean,AppResponse.class))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
