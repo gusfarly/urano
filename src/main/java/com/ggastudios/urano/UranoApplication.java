@@ -1,11 +1,8 @@
 package com.ggastudios.urano;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 
 import java.util.Locale;
 
@@ -13,18 +10,11 @@ import java.util.Locale;
 @SpringBootApplication
 //@ComponentScan(basePackages = {"com.ggastudios.urano.controller","com.ggastudios.urano.service","com.ggastudios.urano.controller.advice"})
 @ComponentScan(basePackages = {"com.ggastudios.urano.*"})
-@Configuration
+@Import({MvcConfigurer.class})
 public class UranoApplication {
-
-	@Autowired
-	private static MessageSource messageSource;
 
 	public static void main(String[] args) {
 		SpringApplication.run(UranoApplication.class, args);
-	}
-
-	public static MessageSource getMessageSource() {
-		return messageSource;
 	}
 
 }
