@@ -11,6 +11,10 @@ public class ApplicationNotFoundException extends ApplicationException {
         super(message, ApplicationException.CODE_APPLICATION_NOT_FOUND);
     }
 
+    public ApplicationNotFoundException(String message, String code) {
+        super(message, code);
+    }
+
     public ApplicationNotFoundException(String message, Throwable cause) {
         super(message, cause, ApplicationException.CODE_APPLICATION_NOT_FOUND);
     }

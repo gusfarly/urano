@@ -8,6 +8,10 @@ public class UserNotFoundException extends UserException {
         super(UserException.CODE_USER_NOT_FOUND);
     }
 
+    public UserNotFoundException(String message, String code) {
+        super(message, code);
+    }
+
     public UserNotFoundException(String message) {
         super(message,UserException.CODE_USER_NOT_FOUND);
     }
