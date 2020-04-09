@@ -2,6 +2,7 @@ package com.ggastudios.urano.service;
 
 import com.ggastudios.urano.bean.AppBean;
 import com.ggastudios.urano.entities.AppEntity;
+import com.ggastudios.urano.exception.ApplicationException;
 import com.ggastudios.urano.exception.ApplicationNotFoundException;
 import com.ggastudios.urano.repository.AppRepository;
 import com.ggastudios.urano.utils.Constanst;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class AppService {
+public class AppService extends BaseService{
 
     @Autowired
     private AppRepository appRepository;
@@ -44,7 +45,7 @@ public class AppService {
     public AppBean findById(String idApplication) throws ApplicationNotFoundException {
         return appRepository.findById(idApplication)
                 .map(entity -> mapperEntity.map(entity,AppBean.class))
-                .orElseThrow(() -> new ApplicationNotFoundException("no existe la aplicacion"));
+                .orElseThrow(() -> new ApplicationNotFoundException(getMessage(ApplicationException.MESSAGE_APPLICATION_NOT_EXIST)));
     }
 
     public List<AppBean> findAll(){
@@ -55,7 +56,7 @@ public class AppService {
 
     public AppBean updateApp(AppBean bean,String idApplication) throws ApplicationNotFoundException {
         AppEntity entity = appRepository.findById(idApplication)
-                .orElseThrow(() -> new ApplicationNotFoundException("no existe la aplicacion"));
+                .orElseThrow(() -> new ApplicationNotFoundException(getMessage(ApplicationException.MESSAGE_APPLICATION_NOT_EXIST)));
         update(entity,bean);
         save(entity);
         return mapperEntity.map(entity,AppBean.class);
