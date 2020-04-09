@@ -4,6 +4,7 @@ import com.ggastudios.urano.bean.AppBean;
 import com.ggastudios.urano.entities.AppEntity;
 import com.ggastudios.urano.exception.ApplicationNotFoundException;
 import com.ggastudios.urano.repository.AppRepository;
+import com.ggastudios.urano.utils.Constanst;
 import com.ggastudios.urano.utils.MappersEntity;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AppService {
@@ -22,7 +25,7 @@ public class AppService {
     private MappersEntity<AppBean, AppEntity> mapperEntity;
 
     private AppEntity save(AppEntity entity){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss.SSSXXX");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constanst.DATE_FORMAT_PATTERN);
         String fecha = simpleDateFormat.format(Calendar.getInstance().getTime());
         if (entity.getStartDate() == null){
             entity.setStartDate(fecha);
@@ -32,7 +35,7 @@ public class AppService {
         return appRepository.save(entity);
     }
 
-    public AppBean insert(AppBean bean) throws ApplicationNotFoundException {
+    public AppBean insert(AppBean bean) {
         AppEntity entity = mapperEntity.map(bean,AppEntity.class);
         entity = save(entity);
         return mapperEntity.map(entity,AppBean.class);
@@ -42,6 +45,12 @@ public class AppService {
         return appRepository.findById(idApplication)
                 .map(entity -> mapperEntity.map(entity,AppBean.class))
                 .orElseThrow(() -> new ApplicationNotFoundException("no existe la aplicacion"));
+    }
+
+    public List<AppBean> findAll(){
+        return appRepository.findAll().stream()
+                .map(entity -> mapperEntity.map(entity,AppBean.class))
+                .collect(Collectors.toList());
     }
 
     public AppBean updateApp(AppBean bean,String idApplication) throws ApplicationNotFoundException {
@@ -66,4 +75,9 @@ public class AppService {
             entity.setOwner(bean.getOwner());
         }
     }
+
+    public boolean exist(String id){
+        return appRepository.countById(id) > 0;
+    }
+
 }

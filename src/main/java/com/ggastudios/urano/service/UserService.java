@@ -2,11 +2,10 @@ package com.ggastudios.urano.service;
 
 import com.ggastudios.urano.bean.UserBean;
 import com.ggastudios.urano.entities.UserEntity;
-import com.ggastudios.urano.exception.ApplicationNotFoundException;
-import com.ggastudios.urano.exception.UserExistsException;
-import com.ggastudios.urano.exception.UserNotFoundException;
+import com.ggastudios.urano.exception.*;
 import com.ggastudios.urano.repository.AppRepository;
 import com.ggastudios.urano.repository.UserRepository;
+import com.ggastudios.urano.utils.Constanst;
 import com.ggastudios.urano.utils.MappersEntity;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +24,13 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private AppRepository appRepository;
+    private AppService appService;
 
     @Autowired
     private MappersEntity<UserBean, UserEntity> mapEntity;
 
     private UserEntity saveUser(UserEntity userEntity){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss.SSSXXX");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constanst.DATE_FORMAT_PATTERN);
         String fecha = simpleDateFormat.format(Calendar.getInstance().getTime());
         if (userEntity.getId() == null){
             userEntity.setDateStart(fecha);
@@ -47,7 +46,7 @@ public class UserService {
      * @return UserResponse
      */
     public UserBean insert(UserBean bean) throws UserExistsException, ApplicationNotFoundException {
-        if (appRepository.countById(bean.getIdApplication()) == 0){
+        if (!appService.exist(bean.getIdApplication())){
             throw new ApplicationNotFoundException("No se puede insertar usuarios para esa aplicacion");
         }
         UserEntity userEntity = mapEntity.map(bean,UserEntity.class);
@@ -66,21 +65,6 @@ public class UserService {
         return userRepository.findById(id)
                 .map(user -> mapEntity.map(user,UserBean.class))
                 .orElseThrow(() -> new UserNotFoundException("usuario " + id + " no encontrado"));
-    }
-
-    public UserBean getByIdApplicationAndUsername(String idApplication, String username) throws UserNotFoundException {
-        return userRepository.findByIdApplicationAndUsername(idApplication,username)
-                .map( user -> mapEntity.map(user,UserBean.class))
-                .orElseThrow(() -> new UserNotFoundException("usuario no encontrado o no existe para la aplicación"));
-    }
-
-    public List<UserBean> getByIdApplication(String idApplication) throws UserNotFoundException {
-        List<UserBean> userBeanList = userRepository.findByIdApplication(idApplication).stream()
-                .map( user -> mapEntity.map(user,UserBean.class)).collect(Collectors.toList());
-        if (userBeanList.isEmpty()){
-            throw new UserNotFoundException("No se encuentran usuarios para esta aplicacion");
-        }
-        return userBeanList;
     }
 
     public List<UserBean> findWithFilter(Map<String, String> filter) throws UserNotFoundException {
@@ -104,16 +88,6 @@ public class UserService {
         return userBeanList;
     }
 
-    public List<UserBean> getAll() throws UserNotFoundException {
-        List<UserBean> userBeanList = userRepository.findAll().stream()
-                .map(user -> mapEntity.map(user,UserBean.class))
-                .collect(Collectors.toList());
-        if (userBeanList.isEmpty()){
-            throw new UserNotFoundException("No se encuentran usuarios con esas condiciones");
-        }
-        return userBeanList;
-    }
-
     public void delete(String id){
         userRepository.deleteById(id);
     }
@@ -132,6 +106,10 @@ public class UserService {
             user.setEmail(bean.getEmail());
         }
         return user;
+    }
+
+    public boolean exist(String id){
+        return (userRepository.countById(id) > 0);
     }
 
 }
