@@ -1,6 +1,6 @@
 package com.ggastudios.urano.exception;
 
-public class ApplicationNotFoundException extends UranoException {
+public class ApplicationNotFoundException extends ApplicationException {
     private static final long serialVersionUID = -6656345815567529384L;
 
     public ApplicationNotFoundException() {

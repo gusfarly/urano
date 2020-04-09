@@ -5,6 +5,8 @@ public class ApplicationException extends UranoException {
     private static final long serialVersionUID = -7890555220149808900L;
 
     public static final String CODE_APPLICATION_NOT_FOUND = "AP0001";
+    public static final String MESSAGE_APPLICATION_NOT_FOUND = "application.exception.code.ap0001";
+    public static final String MESSAGE_APPLICATION_NOT_EXIST = "application.exception.code.ap0001.noexists";
 
     public ApplicationException() {
     }

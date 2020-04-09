@@ -5,6 +5,12 @@ public class ScoreException extends UranoException {
     private static final long serialVersionUID = 6175919385999714520L;
 
     public static final String MULTISCORE_CODE = "SC0001";
+    public static final String MESSAGE_MULTISCORE = "score.exception.code.sc0001";
+    public static final String CODE_USER_NOT_FOUND = "SC0002";
+    public static final String MESSAGE_USER_NOT_FOUND = "score.exception.code.sc0002";
+    public static final String CODE_APPLICATION_NOT_FOUND = "SC0003";
+    public static final String MESSAGE_APPLICATION_NOT_FOUND = "score.exception.code.sc0003";
+
 
     public ScoreException() {
     }
