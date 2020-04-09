@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.*;
 
-import java.util.Locale;
 
 // todo quitar eureka, no es necesario para esta aplicacion de momento al no utilizar microservicios(no son viables por el plan de heroku, ya que cada vez que se cae un micro deja de estar registrado.)
 @SpringBootApplication
