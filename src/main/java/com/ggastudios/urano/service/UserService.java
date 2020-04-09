@@ -5,6 +5,7 @@ import com.ggastudios.urano.entities.UserEntity;
 import com.ggastudios.urano.exception.*;
 import com.ggastudios.urano.repository.AppRepository;
 import com.ggastudios.urano.repository.UserRepository;
+import com.ggastudios.urano.utils.Constanst;
 import com.ggastudios.urano.utils.MappersEntity;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class UserService {
     private MappersEntity<UserBean, UserEntity> mapEntity;
 
     private UserEntity saveUser(UserEntity userEntity){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss.SSSXXX");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constanst.DATE_FORMAT_PATTERN);
         String fecha = simpleDateFormat.format(Calendar.getInstance().getTime());
         if (userEntity.getId() == null){
             userEntity.setDateStart(fecha);
