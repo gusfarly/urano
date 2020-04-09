@@ -74,4 +74,9 @@ public class AppService {
             entity.setOwner(bean.getOwner());
         }
     }
+
+    public boolean exist(String id){
+        return appRepository.countById(id) > 0;
+    }
+
 }

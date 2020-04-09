@@ -2,9 +2,7 @@ package com.ggastudios.urano.service;
 
 import com.ggastudios.urano.bean.UserBean;
 import com.ggastudios.urano.entities.UserEntity;
-import com.ggastudios.urano.exception.ApplicationNotFoundException;
-import com.ggastudios.urano.exception.UserExistsException;
-import com.ggastudios.urano.exception.UserNotFoundException;
+import com.ggastudios.urano.exception.*;
 import com.ggastudios.urano.repository.AppRepository;
 import com.ggastudios.urano.repository.UserRepository;
 import com.ggastudios.urano.utils.MappersEntity;
@@ -25,7 +23,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private AppRepository appRepository;
+    private AppService appService;
 
     @Autowired
     private MappersEntity<UserBean, UserEntity> mapEntity;
@@ -47,7 +45,7 @@ public class UserService {
      * @return UserResponse
      */
     public UserBean insert(UserBean bean) throws UserExistsException, ApplicationNotFoundException {
-        if (appRepository.countById(bean.getIdApplication()) == 0){
+        if (!appService.exist(bean.getIdApplication())){
             throw new ApplicationNotFoundException("No se puede insertar usuarios para esa aplicacion");
         }
         UserEntity userEntity = mapEntity.map(bean,UserEntity.class);
@@ -132,6 +130,10 @@ public class UserService {
             user.setEmail(bean.getEmail());
         }
         return user;
+    }
+
+    public boolean exist(String id){
+        return (userRepository.countById(id) > 0);
     }
 
 }
