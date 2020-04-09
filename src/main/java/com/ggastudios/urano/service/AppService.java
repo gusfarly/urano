@@ -35,7 +35,7 @@ public class AppService {
         return appRepository.save(entity);
     }
 
-    public AppBean insert(AppBean bean) throws ApplicationNotFoundException {
+    public AppBean insert(AppBean bean) {
         AppEntity entity = mapperEntity.map(bean,AppEntity.class);
         entity = save(entity);
         return mapperEntity.map(entity,AppBean.class);
