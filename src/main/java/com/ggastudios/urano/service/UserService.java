@@ -3,7 +3,6 @@ package com.ggastudios.urano.service;
 import com.ggastudios.urano.bean.UserBean;
 import com.ggastudios.urano.entities.UserEntity;
 import com.ggastudios.urano.exception.*;
-import com.ggastudios.urano.repository.AppRepository;
 import com.ggastudios.urano.repository.UserRepository;
 import com.ggastudios.urano.utils.Constanst;
 import com.ggastudios.urano.utils.MappersEntity;
@@ -18,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService extends BaseService{
 
     @Autowired
     private UserRepository userRepository;
@@ -47,7 +46,7 @@ public class UserService {
      */
     public UserBean insert(UserBean bean) throws UserExistsException, ApplicationNotFoundException {
         if (!appService.exist(bean.getIdApplication())){
-            throw new ApplicationNotFoundException("No se puede insertar usuarios para esa aplicacion");
+            throw new ApplicationNotFoundException(getMessage(ApplicationException.MESSAGE_APPLICATION_NOT_FOUND));
         }
         UserEntity userEntity = mapEntity.map(bean,UserEntity.class);
         UserEntity userResponse = saveUser(userEntity);
@@ -64,7 +63,7 @@ public class UserService {
     public UserBean getById(final String id) throws UserNotFoundException {
         return userRepository.findById(id)
                 .map(user -> mapEntity.map(user,UserBean.class))
-                .orElseThrow(() -> new UserNotFoundException("usuario " + id + " no encontrado"));
+                .orElseThrow(() -> new UserNotFoundException(getMessage(UserException.MESSGE_USER_NOT_FOUND_ID , id)));
     }
 
     public List<UserBean> findWithFilter(Map<String, String> filter) throws UserNotFoundException {
@@ -82,7 +81,7 @@ public class UserService {
                 .collect(Collectors.toList());
 
         if (userBeanList.isEmpty()){
-            throw new UserNotFoundException("No se encuentran usuarios con esas condiciones");
+            throw new UserNotFoundException(getMessage(UserException.MESSAGE_USER_NOT_FOUND));
         }
 
         return userBeanList;
