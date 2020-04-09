@@ -6,7 +6,8 @@ public class ApplicationException extends UranoException {
 
     public static final String CODE_APPLICATION_NOT_FOUND = "AP0001";
     public static final String MESSAGE_APPLICATION_NOT_FOUND = "application.exception.code.ap0001";
-    public static final String MESSAGE_APPLICATION_NOT_EXIST = "application.exception.code.ap0001.noexists";
+    public static final String CODE_APPLICATION_NOT_EXIST = "AP0002";
+    public static final String MESSAGE_APPLICATION_NOT_EXIST = "application.exception.code.ap0002";
 
     public ApplicationException() {
     }

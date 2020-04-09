@@ -6,9 +6,9 @@ public class UserException extends UranoException {
 
     public static final String CODE_USER_NOT_FOUND = "US0001";
     public static final String MESSAGE_USER_NOT_FOUND = "user.exception.code.us0001";
-    public static final String MESSGE_USER_NOT_FOUND_ID = "user.exception.code.us0001.id";
-    public static final String CODE_USER_EXISTS = "US0002";
-    public static final String MESSAGE_USER_EXISTS = "user.exception.code.us0002";
+    public static final String CODE_USER_NOT_FOUND_ID = "US0002";
+    public static final String MESSAGE_USER_NOT_FOUND_ID = "user.exception.code.us0002";
+
 
     public UserException() {
     }

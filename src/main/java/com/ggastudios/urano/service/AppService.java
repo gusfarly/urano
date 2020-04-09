@@ -45,7 +45,7 @@ public class AppService extends BaseService{
     public AppBean findById(String idApplication) throws ApplicationNotFoundException {
         return appRepository.findById(idApplication)
                 .map(entity -> mapperEntity.map(entity,AppBean.class))
-                .orElseThrow(() -> new ApplicationNotFoundException(getMessage(ApplicationException.MESSAGE_APPLICATION_NOT_EXIST)));
+                .orElseThrow(() -> new ApplicationNotFoundException(getMessage(ApplicationException.MESSAGE_APPLICATION_NOT_EXIST),ApplicationException.CODE_APPLICATION_NOT_EXIST));
     }
 
     public List<AppBean> findAll(){
@@ -56,7 +56,7 @@ public class AppService extends BaseService{
 
     public AppBean updateApp(AppBean bean,String idApplication) throws ApplicationNotFoundException {
         AppEntity entity = appRepository.findById(idApplication)
-                .orElseThrow(() -> new ApplicationNotFoundException(getMessage(ApplicationException.MESSAGE_APPLICATION_NOT_EXIST)));
+                .orElseThrow(() -> new ApplicationNotFoundException(getMessage(ApplicationException.MESSAGE_APPLICATION_NOT_EXIST),ApplicationException.CODE_APPLICATION_NOT_EXIST));
         update(entity,bean);
         save(entity);
         return mapperEntity.map(entity,AppBean.class);

@@ -63,7 +63,7 @@ public class UserService extends BaseService{
     public UserBean getById(final String id) throws UserNotFoundException {
         return userRepository.findById(id)
                 .map(user -> mapEntity.map(user,UserBean.class))
-                .orElseThrow(() -> new UserNotFoundException(getMessage(UserException.MESSGE_USER_NOT_FOUND_ID , id)));
+                .orElseThrow(() -> new UserNotFoundException(getMessage(UserException.MESSAGE_USER_NOT_FOUND_ID, id),UserException.CODE_USER_NOT_FOUND_ID));
     }
 
     public List<UserBean> findWithFilter(Map<String, String> filter) throws UserNotFoundException {
