@@ -67,21 +67,6 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("usuario " + id + " no encontrado"));
     }
 
-    public UserBean getByIdApplicationAndUsername(String idApplication, String username) throws UserNotFoundException {
-        return userRepository.findByIdApplicationAndUsername(idApplication,username)
-                .map( user -> mapEntity.map(user,UserBean.class))
-                .orElseThrow(() -> new UserNotFoundException("usuario no encontrado o no existe para la aplicación"));
-    }
-
-    public List<UserBean> getByIdApplication(String idApplication) throws UserNotFoundException {
-        List<UserBean> userBeanList = userRepository.findByIdApplication(idApplication).stream()
-                .map( user -> mapEntity.map(user,UserBean.class)).collect(Collectors.toList());
-        if (userBeanList.isEmpty()){
-            throw new UserNotFoundException("No se encuentran usuarios para esta aplicacion");
-        }
-        return userBeanList;
-    }
-
     public List<UserBean> findWithFilter(Map<String, String> filter) throws UserNotFoundException {
 
         UserEntity entity = new UserEntity();
@@ -100,16 +85,6 @@ public class UserService {
             throw new UserNotFoundException("No se encuentran usuarios con esas condiciones");
         }
 
-        return userBeanList;
-    }
-
-    public List<UserBean> getAll() throws UserNotFoundException {
-        List<UserBean> userBeanList = userRepository.findAll().stream()
-                .map(user -> mapEntity.map(user,UserBean.class))
-                .collect(Collectors.toList());
-        if (userBeanList.isEmpty()){
-            throw new UserNotFoundException("No se encuentran usuarios con esas condiciones");
-        }
         return userBeanList;
     }
 
