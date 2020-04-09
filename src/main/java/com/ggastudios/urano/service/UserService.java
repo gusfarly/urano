@@ -44,7 +44,7 @@ public class UserService extends BaseService{
      * @param bean UserBean
      * @return UserResponse
      */
-    public UserBean insert(UserBean bean) throws UserExistsException, ApplicationNotFoundException {
+    public UserBean insert(UserBean bean) throws ApplicationNotFoundException {
         if (!appService.exist(bean.getIdApplication())){
             throw new ApplicationNotFoundException(getMessage(ApplicationException.MESSAGE_APPLICATION_NOT_FOUND));
         }

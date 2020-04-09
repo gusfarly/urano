@@ -4,7 +4,6 @@ package com.ggastudios.urano.controller.advice;
 import com.ggastudios.urano.DTO.ErrorResponse;
 import com.ggastudios.urano.exception.ApplicationNotFoundException;
 import com.ggastudios.urano.exception.UranoException;
-import com.ggastudios.urano.exception.UserExistsException;
 import com.ggastudios.urano.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -43,15 +42,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         errorResponse.setCode(ex.getCode());
         log.error(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(UserExistsException.class)
-    public ResponseEntity<?> handleUserExistsException(UserExistsException ex){
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(ex.getMessage());
-        errorResponse.setCode(ex.getCode());
-        log.error(ex.getMessage());
-        return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(UranoException.class)
