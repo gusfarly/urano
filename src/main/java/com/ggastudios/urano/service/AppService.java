@@ -4,6 +4,7 @@ import com.ggastudios.urano.bean.AppBean;
 import com.ggastudios.urano.entities.AppEntity;
 import com.ggastudios.urano.exception.ApplicationException;
 import com.ggastudios.urano.exception.ApplicationNotFoundException;
+import com.ggastudios.urano.exception.code.AppCodeMessage;
 import com.ggastudios.urano.repository.AppRepository;
 import com.ggastudios.urano.utils.Constanst;
 import com.ggastudios.urano.utils.MappersEntity;
@@ -45,7 +46,7 @@ public class AppService extends BaseService{
     public AppBean findById(String idApplication) throws ApplicationNotFoundException {
         return appRepository.findById(idApplication)
                 .map(entity -> mapperEntity.map(entity,AppBean.class))
-                .orElseThrow(() -> new ApplicationNotFoundException(getMessage(ApplicationException.MESSAGE_APPLICATION_NOT_EXIST),ApplicationException.CODE_APPLICATION_NOT_EXIST));
+                .orElseThrow(() -> new ApplicationNotFoundException(AppCodeMessage.APPLICATION_NOT_EXISTS));
     }
 
     public List<AppBean> findAll(){
@@ -56,7 +57,7 @@ public class AppService extends BaseService{
 
     public AppBean updateApp(AppBean bean,String idApplication) throws ApplicationNotFoundException {
         AppEntity entity = appRepository.findById(idApplication)
-                .orElseThrow(() -> new ApplicationNotFoundException(getMessage(ApplicationException.MESSAGE_APPLICATION_NOT_EXIST),ApplicationException.CODE_APPLICATION_NOT_EXIST));
+                .orElseThrow(() -> new ApplicationNotFoundException(AppCodeMessage.APPLICATION_NOT_EXISTS));
         update(entity,bean);
         save(entity);
         return mapperEntity.map(entity,AppBean.class);

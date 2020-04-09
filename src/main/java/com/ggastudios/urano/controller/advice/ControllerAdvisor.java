@@ -6,6 +6,9 @@ import com.ggastudios.urano.exception.ApplicationNotFoundException;
 import com.ggastudios.urano.exception.UranoException;
 import com.ggastudios.urano.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,30 +29,33 @@ import java.util.stream.Collectors;
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 
+    @Autowired
+    MessageSource messageSource;
+
     @ExceptionHandler(ApplicationNotFoundException.class)
     public ResponseEntity<?> handleApplicacionNotFoundException(ApplicationNotFoundException ex){
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCode(ex.getCode());
-        errorResponse.setMessage(ex.getMessage());
-        log.error(ex.getMessage());
+        errorResponse.setCode(ex.getCodeMessage().getCode());
+        errorResponse.setMessage(getMessage(ex));
+        log.error(String.format("code: %s - message: %s - exception: %s",ex.getCodeMessage().getCode(),getMessage(ex),ex.getMessage()));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException ex){
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(ex.getMessage());
-        errorResponse.setCode(ex.getCode());
-        log.error(ex.getMessage());
+        errorResponse.setMessage(getMessage(ex));
+        errorResponse.setCode(ex.getCodeMessage().getCode());
+        log.error(String.format("code: %s - message: %s - exception: %s",ex.getCodeMessage().getCode(),getMessage(ex),ex.getMessage()));
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UranoException.class)
     public ResponseEntity handleUranopException(UranoException ex){
         ErrorResponse response = new ErrorResponse();
-        response.setMessage(ex.getMessage());
-        response.setCode(ex.getCode());
-        log.error(ex.getMessage());
+        response.setMessage(getMessage(ex));
+        response.setCode(ex.getCodeMessage().getCode());
+        log.error(String.format("code: %s - message: %s - exception: %s",ex.getCodeMessage().getCode(),getMessage(ex),ex.getMessage()));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
@@ -71,6 +77,10 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         body.put("errors", errors);
         log.error(errors.toString());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    private String getMessage(UranoException ex){
+        return messageSource.getMessage(ex.getCodeMessage().getMessage(),ex.getArgs(), LocaleContextHolder.getLocale());
     }
 
 }

@@ -4,6 +4,7 @@ import com.ggastudios.urano.bean.ScoreBean;
 import com.ggastudios.urano.entities.ScoreEntity;
 import com.ggastudios.urano.exception.ScoreException;
 import com.ggastudios.urano.exception.UranoException;
+import com.ggastudios.urano.exception.code.ScoreCodeMessage;
 import com.ggastudios.urano.repository.ScoreRepository;
 import com.ggastudios.urano.utils.Constanst;
 import com.ggastudios.urano.utils.MappersEntity;
@@ -51,10 +52,10 @@ public class ScoreService extends BaseService{
         log.debug("[insert] - **inicio**" );
 
         if (!appService.exist(bean.getApplication())){
-            throw new ScoreException(getMessage(ScoreException.MESSAGE_APPLICATION_NOT_FOUND),ScoreException.CODE_APPLICATION_NOT_FOUND);
+            throw new ScoreException(ScoreCodeMessage.APP_NOT_FOUND);
         }
         if (!userService.exist(bean.getUser())){
-            throw new ScoreException(getMessage(ScoreException.MESSAGE_USER_NOT_FOUND),ScoreException.CODE_USER_NOT_FOUND);
+            throw new ScoreException(ScoreCodeMessage.USER_NOT_FOUND);
         }
 
         int attempt = scoreRepository.countByApplicationAndUserAndLevelEquals(bean.getApplication(),bean.getUser(),bean.getLevel());
@@ -64,7 +65,7 @@ public class ScoreService extends BaseService{
         }else if (attempt == 0){
             entity = mappersEntity.map(bean,ScoreEntity.class);
         }else{
-            throw new ScoreException(ScoreException.MESSAGE_MULTISCORE,ScoreException.CODE_MULTISCORE);
+            throw new ScoreException(ScoreCodeMessage.MULTISCORE);
         }
 
         ScoreEntity entityResponse = this.save(entity);
