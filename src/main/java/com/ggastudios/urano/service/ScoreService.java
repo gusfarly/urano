@@ -6,7 +6,6 @@ import com.ggastudios.urano.exception.ScoreException;
 import com.ggastudios.urano.exception.UranoException;
 import com.ggastudios.urano.exception.code.ScoreCodeMessage;
 import com.ggastudios.urano.repository.ScoreRepository;
-import com.ggastudios.urano.utils.Constanst;
 import com.ggastudios.urano.utils.MappersEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -61,6 +60,9 @@ public class ScoreService extends BaseService{
         ScoreEntity entity;
         if (attempt == 1){
             entity = scoreRepository.findByApplicationAndUserAndLevelEquals(bean.getApplication(),bean.getUser(),bean.getLevel());
+            if (entity.getScore() >= bean.getScore()){
+                throw new ScoreException(ScoreCodeMessage.MINOR_SCORE_THAN_EQUAL);
+            }
             if (StringUtils.isNotBlank(bean.getName())){
                 entity.setName(bean.getName());
             }

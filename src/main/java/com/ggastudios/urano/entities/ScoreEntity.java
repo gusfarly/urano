@@ -22,7 +22,6 @@ public class ScoreEntity implements BaseEntity {
     private String user;
     private String name;
     private int attempt;
-    // todo cambiar estos campos por fechas reales.
     private Date dateUpdate;
     private Date dateLastAttempt;
 
