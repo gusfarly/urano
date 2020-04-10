@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -15,7 +17,8 @@ public class ScoreBean implements BaseBean{
     private long score;
     private String user;
     private String name;
-    private String dateUpdate;
     private int attempt;
+    private Date dateUpdate;
+    private Date dateLastAttempt;
 
 }

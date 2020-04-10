@@ -9,11 +9,11 @@ import com.ggastudios.urano.repository.ScoreRepository;
 import com.ggastudios.urano.utils.Constanst;
 import com.ggastudios.urano.utils.MappersEntity;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
@@ -36,12 +36,11 @@ public class ScoreService extends BaseService{
     private ScoreEntity save(ScoreEntity entity){
         log.debug("[save] - **inicio**" );
         if (entity.getId() == null){
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constanst.DATE_FORMAT_PATTERN);
-            String fecha = simpleDateFormat.format(Calendar.getInstance().getTime());
-            entity.setDateUpdate(fecha);
+            entity.setDateUpdate(Calendar.getInstance().getTime());
             entity.setAttempt( 1 );
         }else{
             entity.setDateLastAttempt(entity.getDateUpdate());
+            entity.setDateUpdate(Calendar.getInstance().getTime());
             entity.setAttempt(entity.getAttempt() + 1 );
         }
         log.debug("[save] - **final**" );
@@ -62,6 +61,9 @@ public class ScoreService extends BaseService{
         ScoreEntity entity;
         if (attempt == 1){
             entity = scoreRepository.findByApplicationAndUserAndLevelEquals(bean.getApplication(),bean.getUser(),bean.getLevel());
+            if (StringUtils.isNotBlank(bean.getName())){
+                entity.setName(bean.getName());
+            }
         }else if (attempt == 0){
             entity = mappersEntity.map(bean,ScoreEntity.class);
         }else{

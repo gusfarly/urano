@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -21,7 +23,7 @@ public class ScoreEntity implements BaseEntity {
     private String name;
     private int attempt;
     // todo cambiar estos campos por fechas reales.
-    private String dateUpdate;
-    private String dateLastAttempt;
+    private Date dateUpdate;
+    private Date dateLastAttempt;
 
 }
