@@ -28,7 +28,7 @@ public class ScoreService extends BaseService{
     @Autowired
     private ScoreRepository scoreRepository;
     @Autowired
-    private UserService userService;
+    private PlayerService playerService;
     @Autowired
     private AppService appService;
 
@@ -52,14 +52,14 @@ public class ScoreService extends BaseService{
         if (!appService.exist(bean.getApplication())){
             throw new ScoreException(ScoreCodeMessage.APP_NOT_FOUND);
         }
-        if (!userService.exist(bean.getUser())){
-            throw new ScoreException(ScoreCodeMessage.USER_NOT_FOUND);
+        if (!playerService.exist(bean.getPlayer())){
+            throw new ScoreException(ScoreCodeMessage.PLAYER_NOT_FOUND);
         }
 
-        int attempt = scoreRepository.countByApplicationAndUserAndLevelEquals(bean.getApplication(),bean.getUser(),bean.getLevel());
+        int attempt = scoreRepository.countByApplicationAndPlayerAndLevelEquals(bean.getApplication(),bean.getPlayer(),bean.getLevel());
         ScoreEntity entity;
         if (attempt == 1){
-            entity = scoreRepository.findByApplicationAndUserAndLevelEquals(bean.getApplication(),bean.getUser(),bean.getLevel());
+            entity = scoreRepository.findByApplicationAndPlayerAndLevelEquals(bean.getApplication(),bean.getPlayer(),bean.getLevel());
             if (entity.getScore() >= bean.getScore()){
                 throw new ScoreException(ScoreCodeMessage.MINOR_SCORE_THAN_EQUAL);
             }

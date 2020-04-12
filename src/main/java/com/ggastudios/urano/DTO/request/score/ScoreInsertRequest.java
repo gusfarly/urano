@@ -20,7 +20,7 @@ public class ScoreInsertRequest implements BaseRequest {
     @NonNull
     private String score;
     @NonNull
-    private String user;
+    private String player;
     private String name;
 
 }

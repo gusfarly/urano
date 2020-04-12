@@ -10,8 +10,8 @@ import java.sql.Date;
 
 @Data
 @EqualsAndHashCode
-@Document(collection = "user")
-public class UserEntity implements BaseEntity {
+@Document(collection = "player")
+public class PlayerEntity implements BaseEntity {
 
     @Transient
     public static final String PARAM_APPLICATION = "idApplication";

@@ -15,7 +15,7 @@ public class ScoreBean implements BaseBean{
     private String application;
     private int level;
     private long score;
-    private String user;
+    private String player;
     private String name;
     private int attempt;
     private Date dateUpdate;

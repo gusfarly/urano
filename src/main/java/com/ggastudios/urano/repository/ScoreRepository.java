@@ -16,9 +16,9 @@ public interface ScoreRepository extends MongoRepository<ScoreEntity,String> {
      */
     List<ScoreEntity> findAllByApplicationAndLevelOrderByScoreDesc(String application, int level, Pageable pageable);
 
-    int countByApplicationAndUserAndLevelEquals(String application,String user,int level);
+    int countByApplicationAndPlayerAndLevelEquals(String application,String player,int level);
 
-    ScoreEntity findByApplicationAndUserAndLevelEquals(String application,String user,int level);
+    ScoreEntity findByApplicationAndPlayerAndLevelEquals(String application,String player,int level);
 
     List<ScoreEntity> findAllByApplicationAndLevelAndScoreIsLessThanOrderByScoreDesc(String application,int level,long score,Pageable pageable);
 

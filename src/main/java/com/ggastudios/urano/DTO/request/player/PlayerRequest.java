@@ -1,4 +1,4 @@
-package com.ggastudios.urano.DTO.request.user;
+package com.ggastudios.urano.DTO.request.player;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ggastudios.urano.DTO.BaseRequest;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserRequest implements BaseRequest {
+public class PlayerRequest implements BaseRequest {
 
     private static final long serialVersionUID = 9220975882318256416L;
     @NotEmpty(message = "idApplication no puede estar vacio")

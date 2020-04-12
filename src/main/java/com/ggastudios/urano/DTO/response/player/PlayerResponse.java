@@ -1,4 +1,4 @@
-package com.ggastudios.urano.DTO.response.user;
+package com.ggastudios.urano.DTO.response.player;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ggastudios.urano.DTO.BaseResponse;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserResponse implements BaseResponse {
+public class PlayerResponse implements BaseResponse {
 
     private static final long serialVersionUID = 4758851866038327046L;
     private String id;

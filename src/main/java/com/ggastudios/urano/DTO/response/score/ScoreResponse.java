@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ScoreResponse implements BaseResponse {
 
     private long score;
-    private String user;
+    private String player;
     private String name;
     private String dateLastAttempt;
     private String dateUpdate;

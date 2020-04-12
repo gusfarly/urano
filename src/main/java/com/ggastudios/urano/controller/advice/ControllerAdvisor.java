@@ -4,7 +4,7 @@ package com.ggastudios.urano.controller.advice;
 import com.ggastudios.urano.DTO.ErrorResponse;
 import com.ggastudios.urano.exception.ApplicationNotFoundException;
 import com.ggastudios.urano.exception.UranoException;
-import com.ggastudios.urano.exception.UserNotFoundException;
+import com.ggastudios.urano.exception.PlayerNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -41,8 +41,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException ex){
+    @ExceptionHandler(PlayerNotFoundException.class)
+    public ResponseEntity<?> handlePlayerNotFoundException(PlayerNotFoundException ex){
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(getMessage(ex));
         errorResponse.setCode(ex.getCodeMessage().getCode());
